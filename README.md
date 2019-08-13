@@ -1,5 +1,5 @@
 # Status of Project
-[![CircleCI](https://circleci.com/gh/georgesequeira/butterflyone.svg?style=svg&circle-token=ad35331f2102a1584e3de3948a9cefe09b8873b4)](https://circleci.com/gh/georgesequeira/butterflyone)
+[![CircleCI](https://circleci.com/gh/butterflyone/butterflyone.svg?style=svg)](https://circleci.com/gh/butterflyone/butterflyone)
 
 # Structure of Application
 ## V1 - iOS Application
