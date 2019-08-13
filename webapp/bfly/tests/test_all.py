@@ -166,4 +166,4 @@ def test_crud_get_major(test_client):
     assert response.status_code == 200
 
     assert response.json is not None
-    assert response.json['title'] == 'Animation'
+    assert response.json['title'] == 'Animation fail on purpose'
