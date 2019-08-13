@@ -1,0 +1,5 @@
+${PODS_ROOT}/Target Support Files/Pods-butterflyone/Pods-butterflyone-frameworks.sh
+${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/Magnetic/Magnetic.framework
+${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework
+${BUILT_PRODUCTS_DIR}/iOSDropDown/iOSDropDown.framework

@@ -1,0 +1,11 @@
+requests==2.22.0
+beautifulsoup4==4.7.1
+ipython==7.5.0
+pytest==4.6.3
+Flask==1.0.2
+Flask-SQLAlchemy==2.3.2
+Flask-RESTful==0.3.7
+PyMySQL==0.9.3
+Flask-WTF
+flask-bootstrap
+Flask-RestPlus

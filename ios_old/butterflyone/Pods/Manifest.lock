@@ -1,0 +1,28 @@
+PODS:
+  - Alamofire (4.8.2)
+  - iOSDropDown (0.3.4)
+  - Magnetic (3.0.0)
+  - SwiftyJSON (5.0.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - iOSDropDown
+  - Magnetic
+  - SwiftyJSON
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - iOSDropDown
+    - Magnetic
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  iOSDropDown: c10a761f9a00c3f1cc9d3bce43ae504628e2f692
+  Magnetic: 58cb8c73dfe73f783ede7719b80202f90c94bdd9
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+
+PODFILE CHECKSUM: cbd8003c96d7966ee9b69656613b08962143c3b8
+
+COCOAPODS: 1.7.4

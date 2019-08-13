@@ -1,0 +1,6 @@
+# This is a place to add things you want gcloud to ignore on upload.
+venv/
+^(.*/)?.*\.csv$
+bfly/.pytest_cache/
+zippia/
+^(.*/)?.*\.pyc$
