@@ -15,7 +15,7 @@ def get_resume(id):
 
 
 class User(db.Model):
-    __tablename__ = "user"
+    __tablename__ = "users"
     id = db.Column(db.String(255), nullable=False, primary_key=True)
     fullname = db.Column(db.String(255))
     phone = db.Column(db.String(255))
