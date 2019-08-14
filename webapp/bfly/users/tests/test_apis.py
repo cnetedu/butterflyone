@@ -1,4 +1,5 @@
 import bfly.db
+import bfly.users.api
 import bfly.users.models
 import bfly.server
 import pytest
@@ -59,3 +60,14 @@ def test_create_dumb_user(test_client):
     assert get_result.json['id'] == 'george@butterflyone.co'
     assert get_result.json['fullname'] == 'george sequeira'
 
+
+def test_validator_phone_number(test_client):
+    assert bfly.users.api.validate_phone_number('3016936356') is None
+    with pytest.raises(ValueError):
+        bfly.users.api.validate_phone_number("9648436")
+
+
+def test_validator_email(test_client):
+    assert bfly.users.api.validate_email_address("george@butterflyone.co") is None
+    with pytest.raises(ValueError):
+        bfly.users.api.validate_email_address("9648436")
