@@ -2,20 +2,33 @@ from bfly.db import db
 import enum
 
 
+class Resume(db.Model):
+    __tablename__ = "resume"
+    id = db.Column(db.String(255), primary_key=True)
+    data = db.Column(db.BLOB)
+    name = db.Column(db.String(45))
+    contentType = db.Column(db.String(120))
+
+
+def get_resume(id):
+    return Resume.query.get(id)
+
+
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.String(255), nullable=False, primary_key=True)
     fullname = db.Column(db.String(255))
+    phone = db.Column(db.String(255))
     email = db.Column(db.String(120))
-    major1 = db.Column(db.String(120))
-    major2 = db.Column(db.String(120))
-    major3 = db.Column(db.String(120))
+    major = db.Column(db.String(120))
     college = db.Column(db.String(255))
     graduationMonth = db.Column(db.Integer)
     graduationYear = db.Column(db.Integer)
-    preferredCity1 = db.Column(db.String(120))
-    preferredCity2 = db.Column(db.String(120))
-    preferredCity3 = db.Column(db.String(120))
+    gpa = db.Column(db.String(10))
+    currentLocation = db.Column(db.String(120))
+    desiredLocation1 = db.Column(db.String(120))
+    desiredLocation2 = db.Column(db.String(120))
+    desiredLocation3 = db.Column(db.String(120))
     # research stuff
     research = db.relationship("MatchRequest")
 
@@ -70,6 +83,7 @@ def update_user(id, params):
     db.session.add(user)
     db.session.commit()
 
+
 class Admin(db.Model):
     __tablename__ = "admin"
     id = db.Column(db.String(255), nullable=False, primary_key=True)
@@ -90,62 +104,68 @@ def create_tables():
 
 def initialize_data():
     george = User(
-        id = "george",
+        id = "1",
         fullname = "George Sequeira",
+        phone = "3016936356",
         email = "george@butterflyone.co",
-        major1 = "Public Relations",
-        major2 = "Management",
-        major3 = "Writing",
+        major = "Public Relations",
         college = "The City College of New York",
         graduationMonth = 5,
         graduationYear = 2021,
-        preferredCity1 = "New York, New York",
-        preferredCity2 = "San Francisco, CA",
-        preferredCity3 = "")
+        gpa = "3.2",
+        currentLocation = "New York City, NY",
+        desiredLocation1 = "San Francisco, CA")
+
     diego = User(
         id = "diego",
         fullname = "Diego Clare",
+        phone = "3016936357",
         email = "diego@butterflyone.co",
-        major1 = "Biochemistry, Biophysics, Molecular Biology",
-        major2 = "Computer Science",
-        major3 = "Biotechnology",
+        major = "Biochemistry, Biophysics, Molecular Biology",
         college = "The City College of New York",
         graduationMonth = 5,
         graduationYear = 2021,
-        preferredCity1 = "New York, New York",
-        preferredCity2 = "San Francisco, CA",
-        preferredCity3 = "")
+        gpa = "3.5",
+        currentLocation = "New York City, NY",
+        desiredLocation1 = "San Francisco, CA")
 
     jake = User(
         id = "jake",
         fullname = "Jake Rosenfeld",
+        phone = "3016936357",
         email = "jake@butterflyone.co",
-        major1 = "Political Science",
-        major2 = "Business Communications",
-        major3 = "",
+        major = "Political Science",
         college = "Lehman College",
         graduationMonth = 5,
         graduationYear = 2021,
-        preferredCity1 = "New York, New York",
-        preferredCity2 = "San Francisco, CA",
-        preferredCity3 = "")
+        gpa = "3.0",
+        currentLocation = "New York City, NY",
+        desiredLocation1 = "San Francisco, CA")
 
     andres = User(
         id = "andres",
         fullname = "Andres Palmiter",
+        phone = "3016936357",
         email = "andres@butterflyone.co",
-        major1 = "Law",
-        major2 = "Criminal Justice",
-        major3 = "Legal Studies",
+        major = "Law",
         college = "John Jay College of Criminal Justice",
         graduationMonth = 5,
         graduationYear = 2021,
-        preferredCity1 = "New York, New York",
-        preferredCity2 = "San Francisco, CA",
-        preferredCity3 = "")
+        gpa = "4.0",
+        currentLocation = "New York City, NY",
+        desiredLocation1 = "San Francisco, CA")
 
     db.session.add(george)
     db.session.add(diego)
     db.session.add(jake)
     db.session.add(andres)
+    db.session.commit()
+
+    george_resume = Resume(
+        id=george.id,
+        data=b'George Resume',
+        name='george_resume.txt',
+        contentType='txt')
+
+    db.session.add(george_resume)
     db.session.commit()
