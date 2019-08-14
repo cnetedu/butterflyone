@@ -9,4 +9,5 @@ PyMySQL==0.9.3
 Flask-WTF
 flask-bootstrap
 Flask-RestPlus
-phonenumbers
+phonenumbers # used to validate phone numbers
+validate_email # used to validate emails

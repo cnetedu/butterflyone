@@ -1,12 +1,13 @@
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
 from flask_restplus import Api, Resource, fields
 from werkzeug import secure_filename
+from validate_email import validate_email
 
 import bfly.users.forms
 import bfly.users.models
 import flask
 import random
-
+import phonenumbers
 
 users = Blueprint('users', __name__, template_folder="templates")
 api = Api(users)
@@ -140,10 +141,35 @@ class Resume(Resource):
         pass
 
 
+def validate_phone_number(phone_number):
+    try:
+        input_number = phonenumbers.parse(phone_number)
+        if not (phonenumbers.is_valid_number(input_number)):
+            raise ValueError('Invalid phone number.')
+    except:
+        input_number = phonenumbers.parse("+1"+phone_number)
+        if not (phonenumbers.is_valid_number(input_number)):
+            raise ValueError('Invalid phone number.')
+
+
+def validate_fullname(name):
+    if len(name) < 1:
+        raise ValueError("Need something in name")
+
+
+def validate_email_address(email):
+    if not validate_email(email):
+        raise ValueError("{} is not a valid email".format(email))
+
+
 def validate_required_creation(data_dict):
     for key in ['fullname', 'phone', 'email']:
         if key not in data_dict:
             raise ValueError("{} required in data".format(key))
+
+    validate_phone_number(data_dict['phone'])
+    validate_email_address(data_dict['email'])
+    validate_fullname(data_dict['fullname'])
 
 
 @ns_conf.route('')
@@ -164,7 +190,11 @@ class UserList(Resource):
         if 'id' in data:
             del data['id']
 
-        validate_required_creation(data)
+        try:
+            validate_required_creation(data)
+        except ValueError as exception:
+            ns_conf.abort(400, "Issue with input data: {}".format(exception))
+
         user = bfly.users.models.User(
             id=data['email'],
             fullname=data['fullname'],
