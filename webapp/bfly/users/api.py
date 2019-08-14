@@ -75,20 +75,12 @@ user_model = api.model('User', {
     'desiredLocation3': fields.String
 })
 
+
 list_of_users = api.model("ListOfUsers", {
     'users': fields.List(fields.Nested(user_model)),
     'token': fields.String
 })
 
-user_update = api.model('UserUpdate', {
-    'fullname': fields.String(),
-    'major1': fields.String,
-    'major2': fields.String,
-    'major3': fields.String,
-    'college': fields.String,
-    'graduationMonth': fields.Integer,
-    'graduationYear': fields.Integer
-})
 
 user_creation = api.model('UserCreation', {
     'fullname': fields.String,
@@ -112,7 +104,7 @@ class User(Resource):
         else:
             ns_conf.abort(404)
 
-    @ns_conf.expect(user_update, validate=True)
+    @ns_conf.expect(user_model, validate=True)
     @ns_conf.marshal_with(user_model)
     def put(self, id):
         """
@@ -121,7 +113,7 @@ class User(Resource):
         :return:
         """
         try:
-            bfly.users.models.update_user(id, request.json)
+            return  bfly.users.models.update_user(id, request.json), 200
         except ValueError:
             ns_conf.abort(404)
 
@@ -180,7 +172,7 @@ class UserList(Resource):
         return dict(users=users, token=next_page), 200
 
     @ns_conf.expect(user_creation, validate=True)
-    @ns_conf.response(201, "User created successfully")
+    @ns_conf.marshal_with(user_model, "User created successfully")
     def post(self):
         """
         Creates a new user
@@ -203,5 +195,6 @@ class UserList(Resource):
         )
 
         bfly.users.models.db.session.add(user)
+        d = user.to_dict()
         bfly.users.models.db.session.commit()
-        return dict(status="Success"), 201
+        return d, 201

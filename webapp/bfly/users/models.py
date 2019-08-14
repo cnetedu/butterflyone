@@ -60,7 +60,7 @@ class MatchStatus(enum.Enum):
 class MatchRequest(db.Model):
     __tablename__ = "match_request"
     id = db.Column(db.Integer, primary_key=True)
-    requesting_user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    requesting_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     worker_id = db.Column(db.String(255)) # admin key
     job = db.Column(db.String(255))
     status = db.Column(db.Enum(MatchStatus), default=MatchStatus.pending)
@@ -78,10 +78,15 @@ def update_user(id, params):
     if not user:
         raise ValueError("No user with that id")
 
+    if 'id' in params:
+        del params['id']
+
     for key, value in params.items():
         setattr(user, key, value)
+    ret_dict = user.to_dict()
     db.session.add(user)
     db.session.commit()
+    return ret_dict
 
 
 class Admin(db.Model):
