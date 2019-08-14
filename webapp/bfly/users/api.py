@@ -190,7 +190,11 @@ class UserList(Resource):
         if 'id' in data:
             del data['id']
 
-        validate_required_creation(data)
+        try:
+            validate_required_creation(data)
+        except ValueError as exception:
+            ns_conf.abort(400, "Issue with input data: {}".format(exception))
+
         user = bfly.users.models.User(
             id=data['email'],
             fullname=data['fullname'],
