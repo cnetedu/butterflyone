@@ -21,6 +21,12 @@ This may not be useful anymore but we dropped it in for posterity.
 - Python3 - https://www.python.org/downloads/
 - Virtualenv - `sudo pip3 install virtualenv`
 
+# Deploy
+```bash
+cd ~/butterflyone/webapp
+gcloud app deploy app.yaml
+
+```
 # butterflyone flask app testing
 To run tests.
 
