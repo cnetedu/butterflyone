@@ -4,3 +4,4 @@ venv/
 bfly/.pytest_cache/
 zippia/
 ^(.*/)?.*\.pyc$
+node_modules/
