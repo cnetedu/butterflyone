@@ -2,11 +2,15 @@
 [![CircleCI](https://circleci.com/gh/butterflyone/butterflyone.svg?style=svg)](https://circleci.com/gh/butterflyone/butterflyone)
 
 # Structure of Application
-## V1 - iOS Application
+## Old V1 - iOS Application
 
 * Data - Data is currently stored in MySQL backend
 * APIs - APIs are served by a python flask backend
 * Mobile - iOS application written in swift.
+
+We initially had an ios app to test out various designs and interaction models. These can be found: https://github.com/butterflyone/butterflyone/tree/master/ios_old/butterflyone/butterflyone
+
+This may not be useful anymore but we dropped it in for posterity.
 
 ## Environment Setup
 - PyCharm CE (Community) - https://www.jetbrains.com/pycharm/download/#section=mac
