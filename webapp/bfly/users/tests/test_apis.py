@@ -6,6 +6,7 @@ import pytest
 import os
 import tempfile
 
+from io import BytesIO
 
 class Config(object):
     def __init__(self, sql_file_path):
@@ -17,6 +18,7 @@ class Config(object):
 def init_db(app):
     with app.app_context():
         bfly.users.models.User.__table__.create(bind=bfly.db.db.engine, checkfirst=False)
+        bfly.users.models.Resume.__table__.create(bind=bfly.db.db.engine, checkfirst=False)
 
 
 @pytest.fixture()
@@ -92,3 +94,27 @@ def test_create_and_update_user(test_client):
     get_result = test_client.get('/users/api/george@butterflyone.co')
     assert get_result.json['fullname'] == 'New George'
 
+
+def test_upload_resume(test_client):
+    resp = test_client.post('/users/api/resume/george@bfly.co', data={
+        "file": (BytesIO(b"George's Resume"), 'resume.txt')},
+        content_type='multipart/form-data')
+    assert '201' in resp.status
+
+    get_resp = test_client.get('/users/api/resume/george@bfly.co')
+    assert b"George's Resume" == get_resp.data
+
+
+def test_update_resume(test_client):
+    resp = test_client.post('/users/api/resume/george@bfly.co', data={
+        "file": (BytesIO(b"George's Resume"), 'resume.txt')},
+        content_type='multipart/form-data')
+    assert '201' in resp.status
+
+    update_resp = test_client.post('/users/api/resume/george@bfly.co', data={
+        "file": (BytesIO(b"George's New Resume"), 'resume.txt')},
+        content_type='multipart/form-data')
+    assert '201' in update_resp.status
+
+    get_resp = test_client.get('/users/api/resume/george@bfly.co')
+    assert b"George's New Resume" == get_resp.data

@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
 from flask_restplus import Api, Resource, fields
 from werkzeug import secure_filename
+from werkzeug.datastructures import FileStorage
 from validate_email import validate_email
 
 import bfly.users.forms
@@ -49,7 +50,7 @@ def creation():
             resume = bfly.users.models.Resume(
                 data=form.binaryResume.data.stream.read(),
                 name=form.binaryResume.data.name,
-                content_type=form.binaryResume.data.content_type,
+                contentType=form.binaryResume.data.content_type,
                 id=user.id
             )
             bfly.users.models.db.session.add(resume)
@@ -92,6 +93,7 @@ user_creation = api.model('UserCreation', {
     'email': fields.String
 })
 
+
 @ns_conf.route('/<string:id>')
 @ns_conf.response(404, 'User not found.')
 class User(Resource):
@@ -124,17 +126,38 @@ class User(Resource):
 
 @ns_conf.route('/resume/<string:id>')
 class Resume(Resource):
+    post_parser = ns_conf.parser()
+    post_parser.add_argument('file', type=FileStorage, location="files")
+    post_parser.add_argument('filename', type='string', location='form')
+
     def get(self, id):
         resume_data = bfly.users.models.get_resume(id)
         if resume_data:
             response = flask.make_response(resume_data.data, 200)
-            response.headers['content-type'] = resume_data.content_type
+            response.headers['content-type'] = resume_data.contentType
+            response.headers['filename'] = resume_data.name
             return response
         else:
             ns_conf.abort(404)
 
-    def put(self, id):
-        pass
+    @ns_conf.expect(post_parser, validate=True)
+    def post(self, id):
+        file = request.files['file']
+        resume = bfly.users.models.get_resume(id)
+        if resume:
+            resume.data = file.read()
+            resume.name = file.filename
+            resume.contentType = file.content_type
+        else:
+            resume = bfly.users.models.Resume(
+                data=file.read(),
+                name=file.filename,
+                contentType=file.content_type,
+                id=id)
+
+        bfly.users.models.db.session.add(resume)
+        bfly.users.models.db.session.commit()
+        return {"status": "success"}, 201
 
 
 def validate_phone_number(phone_number):
