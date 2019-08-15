@@ -31,8 +31,6 @@ class User(db.Model):
     desiredLocation3 = db.Column(db.String(120))
     usAuthorized = db.Column(db.Boolean, default=False)
     over18 = db.Column(db.Boolean, default=True)
-    # research stuff
-    research = db.relationship("MatchRequest")
 
     def __repr__(self):
         return 'User: {}, id: {}'.format(self.fullname, self.id)
@@ -51,21 +49,6 @@ def list_users(limit=10, cursor=None):
     users = [m.to_dict() for m in query.all()]
     next_page = cursor + limit if len(users) == limit else None
     return users, next_page
-
-
-class MatchStatus(enum.Enum):
-    pending = 0
-    in_progress = 1
-    done = 2
-
-
-class MatchRequest(db.Model):
-    __tablename__ = "match_request"
-    id = db.Column(db.Integer, primary_key=True)
-    requesting_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    worker_id = db.Column(db.String(255)) # admin key
-    job = db.Column(db.String(255))
-    status = db.Column(db.Enum(MatchStatus), default=MatchStatus.pending)
 
 
 def get_user(id):

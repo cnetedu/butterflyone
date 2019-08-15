@@ -1,4 +1,4 @@
-# import bfly.job_match.api
+import bfly.job_match.api
 import bfly.jobs.api
 import bfly.majors.api
 import bfly.users.api
@@ -31,6 +31,7 @@ def create_app(config, debug=False, testing=False):
     app.register_blueprint(bfly.jobs.api.jobs)
     app.register_blueprint(bfly.majors.api.majors)
     app.register_blueprint(bfly.users.api.users, url_prefix='/users')
+    app.register_blueprint(bfly.job_match.api.job_match, url_prefix='/job_match')
     flask_bootstrap.Bootstrap(app)
     from bfly.users import models
     # Add an error handler. This is useful for debugging the live application,
