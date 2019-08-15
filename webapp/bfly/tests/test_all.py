@@ -13,43 +13,6 @@ class Config(object):
             'sqlite:///' + sql_file_path
         )
 
-
-INIT_SCRIPTS = [
-    "DROP TABLE IF EXISTS majors;",
-    "DROP TABLE IF EXISTS jobs;",
-    """
-        CREATE TABLE majors (
-          title VARCHAR(255) PRIMARY KEY,
-          best_job_1 TEXT NOT NULL,
-          best_job_2 TEXT NOT NULL,
-          best_job_3 TEXT NOT NULL,
-          best_jobs TEXT NOT NULL
-        );
-        """,
-    """
-        CREATE TABLE JOBS (
-            title VARCHAR(255) PRIMARY KEY,
-            top_skills TEXT,
-            work_styles TEXT,
-            avg_salary INTEGER,
-            description TEXT,
-            duties TEXT
-            industry TEXT,
-            how_to_become TEXT,
-            education TEXT,
-            licenses TEXT,
-            qualities TEXT,
-            advancement TEXT,
-            avg_length_of_employment_yr DOUBLE,
-            majors TEXT,
-            degrees TEXT,
-            skills TEXT,
-            other_skills TEXT,
-            top_employers TEXT,
-            career_path TEXT);
-    """
-]
-
 INSERT_MAJOR_DATA = """
 INSERT INTO majors (title, best_job_1, best_job_2, best_job_3, best_jobs)
 VALUES
@@ -69,8 +32,8 @@ VALUES
 
 def init_db(app):
     with app.app_context():
-        for script in INIT_SCRIPTS:
-            bfly.db.db.engine.execute(script)
+        bfly.majors.models.Major.__table__.create(bind=bfly.db.db.engine, checkfirst=False)
+        bfly.jobs.models.Job.__table__.create(bind=bfly.db.db.engine, checkfirst=False)
         bfly.db.db.engine.execute(INSERT_MAJOR_DATA)
         bfly.db.db.engine.execute(INSERT_JOB_DATA)
 
@@ -144,7 +107,7 @@ def test_crud_get_jobs(test_client):
 
 
 def test_crud_get_job(test_client):
-    response = test_client.get('/jobs/Accountant')
+    response = test_client.get('/jobs/1')
     assert response.status_code == 200
 
     assert response.json is not None

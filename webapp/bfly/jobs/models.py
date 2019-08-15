@@ -3,7 +3,8 @@ from bfly.db import db
 
 class Job(db.Model):
     __tablename__ = "jobs"
-    title = db.Column(db.String(255), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
     top_skills = db.Column(db.JSON)
     work_styles = db.Column(db.JSON)
     avg_salary = db.Column(db.Integer)
@@ -44,8 +45,8 @@ def list_jobs(limit=10, cursor=None):
     return jobs, next_page
 
 
-def read_job(title):
-    result = Job.query.get(title)
+def read_job(id):
+    result = Job.query.get(id)
     if not result:
         return None
     return result.to_dict()
