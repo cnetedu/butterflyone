@@ -39,19 +39,21 @@ def creation():
             desiredLocation1=form.desiredLocation1.data,
             desiredLocation2=form.desiredLocation2.data,
             desiredLocation3=form.desiredLocation3.data,
+            usAuthorized=form.usAuthorized.data,
+            over18=form.over18.data
         )
 
         bfly.users.models.db.session.add(user)
         bfly.users.models.db.session.commit()
-
-        resume = bfly.users.models.Resume(
-            data=form.binaryResume.data.stream.read(),
-            name=form.binaryResume.data.name,
-            content_type=form.binaryResume.data.content_type,
-            id=user.id
-        )
-        bfly.users.models.db.session.add(resume)
-        bfly.users.models.db.session.commit()
+        if form.binaryResume.data:
+            resume = bfly.users.models.Resume(
+                data=form.binaryResume.data.stream.read(),
+                name=form.binaryResume.data.name,
+                content_type=form.binaryResume.data.content_type,
+                id=user.id
+            )
+            bfly.users.models.db.session.add(resume)
+            bfly.users.models.db.session.commit()
 
         flash("You successfully created a user.")
         return redirect(url_for("users.dashboard"))
@@ -72,7 +74,9 @@ user_model = api.model('User', {
     'currentLocation': fields.String,
     'desiredLocation1': fields.String,
     'desiredLocation2': fields.String,
-    'desiredLocation3': fields.String
+    'desiredLocation3': fields.String,
+    'usAuthorized': fields.Boolean,
+    'over18': fields.Boolean,
 })
 
 

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField, FileRequired
-from wtforms import PasswordField, StringField, SubmitField, ValidationError, IntegerField
+from wtforms import PasswordField, StringField, SubmitField, ValidationError, IntegerField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 import bfly.users.models
@@ -28,7 +28,7 @@ with open(os.path.join(script_dir, universities_rel_path)) as o:
 
 
 def location_check(form, field):
-    if field.data not in cities:
+    if field.data and field.data not in cities:
         raise ValidationError('{} is not a valid city.'.format(field.data))
 
 
@@ -42,12 +42,13 @@ class UserCreation(FlaskForm):
     graduationMonth = IntegerField('Graduation Month', validators=[DataRequired()])
     graduationYear = IntegerField('Graduation Year', validators=[DataRequired()])
     gpa = StringField('GPA', validators=[DataRequired()])
-    currentLocation = StringField('CurrentLocation', validators=[DataRequired(), location_check])
-    desiredLocation1 = StringField('DesiredLocation1', validators=[DataRequired(), location_check])
-    desiredLocation2 = StringField('DesiredLocation2', validators=[DataRequired(), location_check])
-    desiredLocation3 = StringField('DesiredLocation3', validators=[DataRequired(), location_check])
-    binaryResume = FileField('Resume', validators=[FileRequired(),
-                                                   FileAllowed(['pdf', 'docx', 'doc', 'txt'],
+    currentLocation = StringField('CurrentLocation', validators=[location_check])
+    desiredLocation1 = StringField('DesiredLocation1', validators=[location_check])
+    desiredLocation2 = StringField('DesiredLocation2', validators=[location_check])
+    desiredLocation3 = StringField('DesiredLocation3', validators=[location_check])
+    usAuthorized = BooleanField('US Authorized')
+    over18 = BooleanField('Are you over 18?')
+    binaryResume = FileField('Resume', validators=[FileAllowed(['pdf', 'docx', 'doc', 'txt'],
                                                                'Only pdf, docx, doc, txt, supported!')])
     submit = SubmitField('Store')
 

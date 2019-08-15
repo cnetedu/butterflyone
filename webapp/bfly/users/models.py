@@ -29,6 +29,8 @@ class User(db.Model):
     desiredLocation1 = db.Column(db.String(120))
     desiredLocation2 = db.Column(db.String(120))
     desiredLocation3 = db.Column(db.String(120))
+    usAuthorized = db.Column(db.Boolean, default=False)
+    over18 = db.Column(db.Boolean, default=True)
     # research stuff
     research = db.relationship("MatchRequest")
 
@@ -119,7 +121,8 @@ def initialize_data():
         graduationYear = 2021,
         gpa = "3.2",
         currentLocation = "New York City, NY",
-        desiredLocation1 = "San Francisco, CA")
+        desiredLocation1 = "San Francisco, CA",
+        usAuthorized=True)
 
     diego = User(
         id = "diego",
@@ -132,7 +135,8 @@ def initialize_data():
         graduationYear = 2021,
         gpa = "3.5",
         currentLocation = "New York City, NY",
-        desiredLocation1 = "San Francisco, CA")
+        desiredLocation1 = "San Francisco, CA",
+        usAuthorized=True)
 
     jake = User(
         id = "jake",
@@ -145,7 +149,8 @@ def initialize_data():
         graduationYear = 2021,
         gpa = "3.0",
         currentLocation = "New York City, NY",
-        desiredLocation1 = "San Francisco, CA")
+        desiredLocation1 = "San Francisco, CA",
+        usAuthorized=True)
 
     andres = User(
         id = "andres",
@@ -158,7 +163,8 @@ def initialize_data():
         graduationYear = 2021,
         gpa = "4.0",
         currentLocation = "New York City, NY",
-        desiredLocation1 = "San Francisco, CA")
+        desiredLocation1 = "San Francisco, CA",
+        usAuthorized=True)
 
     db.session.add(george)
     db.session.add(diego)
