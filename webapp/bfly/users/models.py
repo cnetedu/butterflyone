@@ -5,7 +5,7 @@ import enum
 class Resume(db.Model):
     __tablename__ = "resume"
     id = db.Column(db.String(255), primary_key=True)
-    data = db.Column(db.BLOB)
+    data = db.Column(db.LargeBinary(length=(2**24)-1))
     name = db.Column(db.String(45))
     contentType = db.Column(db.String(120))
 
