@@ -71,3 +71,24 @@ def test_validator_email(test_client):
     assert bfly.users.api.validate_email_address("george@butterflyone.co") is None
     with pytest.raises(ValueError):
         bfly.users.api.validate_email_address("9648436")
+
+
+def test_create_and_update_user(test_client):
+    test_client.post('/users/api', headers={"Content-Type": "application/json"}, json=dict(
+        email="george@butterflyone.co",
+        fullname="george sequeira",
+        phone="3016936356"))
+
+    get_result = test_client.get('/users/api/george@butterflyone.co')
+    assert get_result.json['id'] == 'george@butterflyone.co'
+    assert get_result.json['fullname'] == 'george sequeira'
+
+    put_result = test_client.put(
+        '/users/api/george@butterflyone.co',
+        headers={'Content-Type': 'application/json'},
+        json=dict(fullname="New George"))
+
+    assert put_result.json['fullname'] == 'New George'
+    get_result = test_client.get('/users/api/george@butterflyone.co')
+    assert get_result.json['fullname'] == 'New George'
+
